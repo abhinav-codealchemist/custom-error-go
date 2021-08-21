@@ -3,10 +3,8 @@ package error
 import (
 	"errors"
 	"fmt"
+	errorsPkg "github.com/pkg/errors"
 	"strings"
-
-	"github.com/Zomato/go/logger"
-	errors2 "github.com/pkg/errors"
 )
 
 type CustomError struct {
@@ -20,7 +18,7 @@ type CustomError struct {
 func NewCustomError(errorCode ErrorCode, error string) CustomError {
 	c := CustomError{errorCode: errorCode, errorMsg: error, exists: true}
 	e := errors.New(fmt.Sprintf("Code: %s | %s", c.errorCode, c.errorMsg))
-	c.error = errors2.WithStack(e)
+	c.error = errorsPkg.WithStack(e)
 	c.loggingParams = make(map[string]interface{}, 0)
 	return c
 }
@@ -30,7 +28,7 @@ func (c CustomError) Exists() bool {
 }
 
 func (c CustomError) Log() {
-	logger.Errorln(c.ToString())
+	fmt.Println(c.ToString())
 }
 
 func (c CustomError) LoggingParams() map[string]interface{} {
